@@ -27,7 +27,8 @@
 </template>
 
 <script>
-import request from '@/utils/request.js'
+// import request from '@/utils/request.js'
+import { login } from '@/api/user'
 
 export default {
   // 组件名称
@@ -97,22 +98,23 @@ export default {
       // 开启登录中loading
       this.loginLoading = true
 
-      request({
-        method: 'POST',
-        url: '/mp/v1_0/authorizations',
-        // data 用来设置 POST 请求体
-        data: this.userForm
-      })
-        .then(res => {
-          console.log(res)
-          this.$message({
-            message: '登录成功',
-            type: 'success'
-          })
-
-          // 关闭登录中loading
-          this.loginLoading = false
+      //   request({
+      //     method: 'POST',
+      //     url: '/mp/v1_0/authorizations',
+      //     // data 用来设置 POST 请求体
+      //     data: this.userForm
+      //   })
+      //   封装后直接使用login()
+      login(this.userForm).then(res => {
+        console.log(res)
+        this.$message({
+          message: '登录成功',
+          type: 'success'
         })
+
+        // 关闭登录中loading
+        this.loginLoading = false
+      })
         .catch(err => {
           console.log('登录失败', err)
           // 登录失败

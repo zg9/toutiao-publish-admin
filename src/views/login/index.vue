@@ -114,6 +114,11 @@ export default {
 
         // 关闭登录中loading
         this.loginLoading = false
+
+        // 跳转到首页
+        // 两种方法都行
+        // this.$router.push('/')
+        this.$router.push({ name: 'home' })
       })
         .catch(err => {
           console.log('登录失败', err)

@@ -106,7 +106,7 @@ export default {
       //   })
       //   封装后直接使用login()
       login(this.userForm).then(res => {
-        console.log(res)
+        // console.log(res)
         this.$message({
           message: '登录成功',
           type: 'success'
@@ -114,6 +114,12 @@ export default {
 
         // 关闭登录中loading
         this.loginLoading = false
+
+        // console.log(res.data.data)
+        // 将接口返回的用户相关数据放到本地存储,方便应用数据共享
+        // 本地存储只能存储字符串
+        // 如果需要存储对象,数组类型的数据,则把他们用JSON.stringify转为JSON格式字符串存储
+        window.localStorage.setItem('userData', JSON.stringify(res.data.data))
 
         // 跳转到首页
         // 两种方法都行

@@ -12,6 +12,10 @@ export const login = data => {
 
 // 获取用户信息
 export const getUserProfile = () => {
+  // 获取存储的localStorage,使用JSON.parse转义回来
+  const userData = JSON.parse(window.localStorage.getItem('userData'))
+  //   console.log(userData)
+
   return request({
     method: 'Get',
     url: '/mp/v1_0/user/profile',
@@ -21,7 +25,8 @@ export const getUserProfile = () => {
     // 属性名和值都需要看接口的要求
     // 属性名:Authorization,接口要求的
     // 属性值:Bearer空格token数据
-      Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NTQ0MzU1MjgsInVzZXJfaWQiOjEsInJlZnJlc2giOmZhbHNlLCJ2ZXJpZmllZCI6dHJ1ZX0.3tRqANUk48nzbm-6xZVA2boiFBMHie77kTFV6CR4Sgs'
+    // 使用反引号和$拼接字符串比 'Bearer ' + userData.token好一些
+      Authorization: `Bearer ${userData.token}`
     }
   })
 }

@@ -8,6 +8,26 @@ const request = axios.create({
 })
 
 // 请求拦截器
+request.interceptors.request.use(
+  // 所有api请求都必定会经过这里,
+  function (config) {
+    // console.log(config)
+
+    // 可以在请求出去之前定制统一业务功能  例如统一设置token
+    const userData = JSON.parse(window.localStorage.getItem('userData'))
+
+    // 如果有登录用户信息,则统一设置token
+    if (userData) {
+      config.headers.Authorization = `Bearer ${userData.token}`
+    }
+
+    // 当return config之后请求才会真正的发出去
+    return config
+  },
+  //   请求失败经过这里
+  function (error) {
+    return Promise.reject(error)
+  })
 
 // 响应拦截器
 

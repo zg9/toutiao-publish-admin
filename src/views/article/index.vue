@@ -28,10 +28,9 @@
         <el-form-item label="频道">
           <el-select v-model="form.region"
                      placeholder="请选择频道">
-            <el-option label="区域一"
-                       value="shanghai"></el-option>
-            <el-option label="区域二"
-                       value="beijing"></el-option>
+            <el-option :label="channel.name"
+                       :value="channel.id"
+                       v-for="(channel,index) in channels" :key="index"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="日期">
@@ -136,7 +135,7 @@
 </template>
 
 <script>
-import { getArticles } from '@/api/article'
+import { getArticles, getArticleChannels } from '@/api/article'
 
 export default {
   name: 'ArticleIndex',
@@ -165,13 +164,15 @@ export default {
       ],
       totalCount: 0, // 总数据条数
       pageSize: 20, // 每页大小
-      status: null // 查询文章的状态,不传就是全部
+      status: null, // 查询文章的状态,不传就是全部
+      channels: [] // 文章频道列表
     }
   },
   computed: {},
   watch: {},
   created () {
     this.loadArticles(1)
+    this.loadChannels()
   },
   mounted () {},
   methods: {
@@ -193,6 +194,12 @@ export default {
     onCurrentChange (page) {
       //   console.log(page)
       this.loadArticles(page)
+    },
+
+    loadChannels () {
+      getArticleChannels().then(res => {
+        this.channels = res.data.data.channels
+      })
     }
   }
 }

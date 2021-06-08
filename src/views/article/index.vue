@@ -79,11 +79,16 @@
           <!-- 如果需要在自定义列模板中获取当前遍历项数据，那么就在 template 上声明 slot-scope="scope" -->
           <template slot-scope="scope">
             <!-- {{scope.row.status}} -->
-            <el-tag v-if="scope.row.status === 0">草稿</el-tag>
-            <el-tag type="warning" v-else-if="scope.row.status === 1">待审核</el-tag>
-            <el-tag type="success" v-else-if="scope.row.status === 2">审核通过</el-tag>
-            <el-tag type="danger" v-else-if="scope.row.status === 3">审核失败</el-tag>
-            <el-tag type="info" v-else-if="scope.row.status === 4">已删除</el-tag>
+            <el-tag :type="articleStatus[scope.row.status].type">{{articleStatus[scope.row.status].text}}</el-tag>
+            <!-- <el-tag v-if="scope.row.status === 0">草稿</el-tag>
+            <el-tag type="warning"
+                    v-else-if="scope.row.status === 1">待审核</el-tag>
+            <el-tag type="success"
+                    v-else-if="scope.row.status === 2">审核通过</el-tag>
+            <el-tag type="danger"
+                    v-else-if="scope.row.status === 3">审核失败</el-tag>
+            <el-tag type="info"
+                    v-else-if="scope.row.status === 4">已删除</el-tag> -->
           </template>
         </el-table-column>
         <el-table-column prop="pubdate"
@@ -130,7 +135,15 @@ export default {
         resource: '',
         desc: ''
       },
-      articles: [] // 文章数据列表
+      articles: [], // 文章数据列表
+      articleStatus: [
+        //   status可以不写,如果遇到没有规律的要写
+        { status: 0, text: '草稿', type: 'info' },
+        { status: 1, text: '待审核', type: '' },
+        { status: 2, text: '审核通过', type: 'success' },
+        { status: 3, text: '审核失败', type: 'warning' },
+        { status: 4, text: '已删除', type: 'danger' }
+      ]
     }
   },
   computed: {},

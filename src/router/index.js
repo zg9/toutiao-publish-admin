@@ -33,4 +33,22 @@ const router = new VueRouter({
   routes
 })
 
+// 路由导航守卫
+router.beforeEach((to, from, next) => {
+//   console.log(to)
+
+  const userData = JSON.parse(window.localStorage.getItem('userData'))
+
+  // 访问/login以外的都要校验登录状态
+  if (to.path !== '/login') {
+    if (userData) {
+      next()
+    } else {
+      next('/login')
+    }
+  } else {
+    next()
+  }
+})
+
 export default router

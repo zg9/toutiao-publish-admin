@@ -17,7 +17,7 @@ export const getUserProfile = () => {
   //   console.log(userData)
 
   return request({
-    method: 'Get',
+    method: 'GET',
     url: '/mp/v1_0/user/profile'
     // 后端要求把需要授权的用户身份放到请求头中
     // axios可以通过headers选项设置请求头

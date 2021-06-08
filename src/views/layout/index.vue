@@ -2,13 +2,20 @@
   <!-- 布局组件 -->
   <el-container class="layout-container">
     <el-aside class="aside"
-              width="200px">
-      <app-aside class="aside-menu" />
+              width="auto">
+      <app-aside class="aside-menu"
+                 :is-collapse="isCollapse" />
       <!-- 或者 <AppAside /> -->
     </el-aside>
     <el-container>
       <el-header class="header">
-        <div><i class="el-icon-s-fold"></i>
+        <div>
+          <!-- 展开收缩切换icon -->
+          <i :class="{
+                  'el-icon-s-fold':isCollapse,
+                  'el-icon-s-unfold':!isCollapse
+             }"
+             @click="isCollapse = !isCollapse"></i>
           <!-- <i class="el-icon-s-unfold"></i> -->
           <span>江苏传智播客科技教育有限公司</span>
         </div>
@@ -36,6 +43,7 @@
 
 <script>
 import AppAside from './components/aside'
+// 获取用户信息接口
 import { getUserProfile } from '@/api/user'
 
 export default {
@@ -46,7 +54,8 @@ export default {
   },
   data () {
     return {
-      user: {} // 当前登录用户信息
+      user: {}, // 当前登录用户信息
+      isCollapse: false // 侧边栏展开与收缩
     }
   },
   computed: {},

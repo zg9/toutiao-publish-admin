@@ -4,7 +4,8 @@
            background-color="#002033"
            text-color="#fff"
            active-text-color="#ffd04b"
-           router>
+           router
+           :collapse="isCollapse">
     <!-- 加上router,index就可以跳转路径 -->
     <el-menu-item index="/">
       <i class="el-icon-s-home"></i>
@@ -40,10 +41,12 @@
 <script>
 export default {
   name: 'AppAside',
-  props: {},
+  props: ['is-collapse'], // 驼峰换成**-**
   components: {},
   data () {
-    return {}
+    return {
+    //   isCollapse: true
+    }
   },
   computed: {},
   watch: {},

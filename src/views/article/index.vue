@@ -124,7 +124,8 @@
       <!-- 列表分页 -->
       <el-pagination layout="prev, pager, next"
                      background
-                     :total="1000">
+                     :total="1000"
+                     @current-change="onCurrentChange">
       </el-pagination>
     </el-card>
   </div>
@@ -163,18 +164,27 @@ export default {
   computed: {},
   watch: {},
   created () {
-    this.loadArticles()
+    this.loadArticles(1)
   },
   mounted () {},
   methods: {
-    loadArticles () {
-      getArticles().then((res) => {
+    loadArticles (page = 1) {
+      getArticles({
+        page,
+        per_page: 10
+      }).then((res) => {
         // console.log(res)
         this.articles = res.data.data.results
       })
     },
+
     onSubmit () {
       console.log('submit!')
+    },
+
+    onCurrentChange (page) {
+      //   console.log(page)
+      this.loadArticles(page)
     }
   }
 }

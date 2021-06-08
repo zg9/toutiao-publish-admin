@@ -125,7 +125,8 @@
       <el-pagination layout="prev, pager, next"
                      background
                      :total="totalCount"
-                     @current-change="onCurrentChange">
+                     @current-change="onCurrentChange"
+                     :page-size="pageSize">
       </el-pagination>
     </el-card>
   </div>
@@ -159,7 +160,8 @@ export default {
         { status: 3, text: '审核失败', type: 'warning' },
         { status: 4, text: '已删除', type: 'danger' }
       ],
-      totalCount: 0 // 总数据条数
+      totalCount: 0, // 总数据条数
+      pageSize: 20 // 每页大小
     }
   },
   computed: {},
@@ -172,7 +174,7 @@ export default {
     loadArticles (page = 1) {
       getArticles({
         page,
-        per_page: 10
+        per_page: this.pageSize
       }).then((res) => {
         // console.log(res)
         // 解构this.articles = res.data.data.results,定一个对象方便一些

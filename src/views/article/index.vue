@@ -50,6 +50,7 @@
           <!-- button按钮的click有一个默认参数,
             当你没有指定参数时,会默认传递一个没用的数据 -->
           <el-button type="primary"
+                     :disabled="loading"
                      @click="loadArticles(1)">查询</el-button>
         </el-form-item>
       </el-form>
@@ -75,7 +76,8 @@
                 style="width: 100%"
                 stripe
                 size="mini"
-                class="list-table">
+                class="list-table"
+                v-loading="loading">
         <el-table-column prop="date"
                          label="封面">
           <template slot-scope="scope">
@@ -133,7 +135,8 @@
                      background
                      :total="totalCount"
                      @current-change="onCurrentChange"
-                     :page-size="pageSize">
+                     :page-size="pageSize"
+                     :disabled="loading">
       </el-pagination>
     </el-card>
   </div>
@@ -172,7 +175,8 @@ export default {
       status: null, // 查询文章的状态,不传就是全部
       channels: [], // 文章频道列表
       channelId: null, // 查询文章的频道
-      rangeDate: null // 筛选日期范围
+      rangeDate: null, // 筛选日期范围
+      loading: true // 表单数据加载loading
     }
   },
   computed: {},
@@ -184,6 +188,8 @@ export default {
   mounted () {},
   methods: {
     loadArticles (page = 1) {
+      // 展示加载loading
+      this.loading = true
       getArticles({
         page,
         per_page: this.pageSize,
@@ -198,6 +204,9 @@ export default {
         const { results, total_count: totalCount } = res.data.data
         this.articles = results
         this.totalCount = totalCount
+
+        // 关闭加载loading
+        this.loading = false
       })
     },
 
@@ -225,7 +234,7 @@ export default {
 }
 
 .article-cover {
-  width: 60px;
+  width: 50px;
   background-size: cover;
 }
 </style>

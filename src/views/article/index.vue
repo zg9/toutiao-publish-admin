@@ -10,9 +10,7 @@
         </el-breadcrumb>
       </div>
       <!-- 数据筛选表单 -->
-      <el-form ref="form"
-               :model="form"
-               size="mini"
+      <el-form size="mini"
                label-width="40px">
         <el-form-item label="状态">
           <el-radio-group v-model="status">
@@ -135,7 +133,7 @@
       <el-pagination layout="prev, pager, next"
                      background
                      :total="totalCount"
-                     @current-change="onCurrentChange"
+                     @current-change="loadArticles"
                      :page-size="pageSize"
                      :disabled="loading"
                      :current-page.sync="page">
@@ -153,16 +151,6 @@ export default {
   components: {},
   data () {
     return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
       articles: [], // 文章数据列表
       articleStatus: [
         //   status可以不写,如果遇到没有规律的要写
@@ -185,12 +173,13 @@ export default {
   computed: {},
   watch: {},
   created () {
+    //   页面初始化,加载第一页
     this.loadArticles(1)
     this.loadChannels()
   },
   mounted () {},
   methods: {
-    loadArticles (page = 1) {
+    loadArticles (page) {
       // 展示加载loading
       this.loading = true
       getArticles({
@@ -213,10 +202,10 @@ export default {
       })
     },
 
-    onCurrentChange (page) {
-      //   console.log(page)
-      this.loadArticles(page)
-    },
+    // onCurrentChange (page) {
+    //   //   console.log(page)
+    //   this.loadArticles(page)
+    // },
 
     loadChannels () {
       getArticleChannels().then((res) => {

@@ -118,7 +118,7 @@
                          label="发布时间">
         </el-table-column>
         <el-table-column label="操作">
-          <template>
+          <template slot-scope="scope">
             <el-button size="mini"
                        circle
                        icon="el-icon-edit"
@@ -126,7 +126,8 @@
             <el-button size="mini"
                        type="danger"
                        circle
-                       icon="el-icon-delete"></el-button>
+                       icon="el-icon-delete"
+                       @click="onDeleteArticle(scope.row.id)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -136,14 +137,15 @@
                      :total="totalCount"
                      @current-change="onCurrentChange"
                      :page-size="pageSize"
-                     :disabled="loading">
+                     :disabled="loading"
+                     :current-page.sync="page">
       </el-pagination>
     </el-card>
   </div>
 </template>
 
 <script>
-import { getArticles, getArticleChannels } from '@/api/article'
+import { getArticles, getArticleChannels, deleteArticle } from '@/api/article'
 
 export default {
   name: 'ArticleIndex',
@@ -176,7 +178,8 @@ export default {
       channels: [], // 文章频道列表
       channelId: null, // 查询文章的频道
       rangeDate: null, // 筛选日期范围
-      loading: true // 表单数据加载loading
+      loading: true, // 表单数据加载loading
+      page: 1
     }
   },
   computed: {},
@@ -218,6 +221,27 @@ export default {
     loadChannels () {
       getArticleChannels().then((res) => {
         this.channels = res.data.data.channels
+      })
+    },
+
+    onDeleteArticle (articleId) {
+    //   console.log(articleId)
+    //   console.log(articleId.toString())
+      this.$confirm('是否确认删除', '删除提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteArticle(articleId.toString()).then(res => {
+        //   console.log(res)
+        // 删除成功,更新当前页的文章数据列表
+          this.loadArticles(this.page)
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       })
     }
   }

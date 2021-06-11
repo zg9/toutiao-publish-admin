@@ -32,7 +32,9 @@ export const deleteArticle = articleId => {
   })
 }
 
-// 新建文章
+/**
+ * 新建文章
+ */
 export const addArticle = (data, draft = false) => {
   return request({
     method: 'POST',

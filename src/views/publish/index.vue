@@ -16,8 +16,10 @@
             <el-input v-model="article.title"></el-input>
           </el-form-item>
           <el-form-item label="内容">
-            <el-input type="textarea"
-                      v-model="article.content"></el-input>
+            <!-- <el-input type="textarea"
+                      v-model="article.content"></el-input> -->
+            <el-tiptap v-model="article.content" :extensions="extensions" lang="zh" height="320"
+            placeholder="请输入文章内容"></el-tiptap>
           </el-form-item>
           <el-form-item label="封面">
             <el-radio-group v-model="article.cover.type">
@@ -28,13 +30,12 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="频道">
-            <el-select v-model="article.channel_id" placeholder="请选择频道">
-              <el-option
-              :label="channel.name"
-              :value="channel.id"
-              v-for="(channel,index) in channels"
-              :key="index"
-              ></el-option>
+            <el-select v-model="article.channel_id"
+                       placeholder="请选择频道">
+              <el-option :label="channel.name"
+                         :value="channel.id"
+                         v-for="(channel,index) in channels"
+                         :key="index"></el-option>
             </el-select>
 
           </el-form-item>
@@ -50,24 +51,76 @@
 </template>
 
 <script>
-import { getArticleChannels, addArticle, getArticle, updateArticle } from '@/api/article'
+import {
+  getArticleChannels,
+  addArticle,
+  getArticle,
+  updateArticle
+} from '@/api/article'
+import {
+  ElementTiptap,
+  Doc,
+  Text,
+  Paragraph,
+  Heading,
+  Bold,
+  Underline,
+  Italic,
+  Image,
+  Strike,
+  ListItem,
+  BulletList,
+  OrderedList,
+  TodoItem,
+  TodoList,
+  HorizontalRule,
+  Fullscreen,
+  Preview,
+  CodeBlock
+} from 'element-tiptap'
+import 'element-tiptap/lib/index.css'
 
 export default {
   name: 'PublishIndex',
   props: {},
-  components: {},
+  components: {
+    'el-tiptap': ElementTiptap
+  },
   data () {
     return {
       channels: [], // 文章频道列表
       article: {
         title: '', // 文章标题
         content: '', // 文章内容
-        cover: { // 文章封面
+        cover: {
+          // 文章封面
           type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
           images: [] // 封面图片地址
         },
         channel_id: null // 文章所属频道id
-      }
+      },
+      // 编辑器的 extensions
+      // 它们将会按照你声明的顺序被添加到菜单栏和气泡菜单中
+      extensions: [
+        new Doc(),
+        new Text(),
+        new Paragraph(),
+        new Heading({ level: 3 }),
+        new Bold({ bubble: true }), // 在气泡菜单中渲染菜单按钮
+        new Image(),
+        new Underline(), // 下划线
+        new Italic(), // 斜体
+        new Strike(), // 删除线
+        new HorizontalRule(), // 华丽的分割线
+        new ListItem(),
+        new BulletList(), // 无序列表
+        new OrderedList(), // 有序列表
+        new TodoItem(),
+        new TodoList(),
+        new Fullscreen(),
+        new Preview(),
+        new CodeBlock()
+      ]
     }
   },
   computed: {},
@@ -92,7 +145,7 @@ export default {
       getArticleChannels().then(({ data: { data } }) => {
         this.channels = data.channels
       }) */
-      getArticleChannels().then(res => {
+      getArticleChannels().then((res) => {
         // console.log(res)
         this.channels = res.data.data.channels
       })
@@ -101,12 +154,12 @@ export default {
       // 找到数据接口
       // 封装请求方法
       // 请求提交表单
-    //   如果是修改文章.则执行修改操作,否则执行发布操作
+      //   如果是修改文章.则执行修改操作,否则执行发布操作
       const articleId = this.$route.query.id
       if (articleId) {
         // 执行修改操作
-        updateArticle(articleId, this.article, draft).then(res => {
-        //   console.log(res)
+        updateArticle(articleId, this.article, draft).then((res) => {
+          //   console.log(res)
           this.$message({
             message: `${draft ? '存入草稿' : '发布'}成功`,
             type: 'success'
@@ -114,9 +167,9 @@ export default {
           this.$router.push('/article')
         })
       } else {
-        addArticle(this.article, draft).then(res => {
-        // 处理响应结果
-        // console.log(res)
+        addArticle(this.article, draft).then((res) => {
+          // 处理响应结果
+          // console.log(res)
           this.$message({
             message: `${draft ? '存入草稿' : '发布'}成功`,
             type: 'success'
@@ -129,7 +182,7 @@ export default {
 
     // 修改文章:加载文章内容
     loadArticles () {
-      getArticle(this.$route.query.id).then(res => {
+      getArticle(this.$route.query.id).then((res) => {
         // console.log(res)
         this.article = res.data.data
       })

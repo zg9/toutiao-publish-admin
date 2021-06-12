@@ -79,6 +79,7 @@ import {
   CodeBlock
 } from 'element-tiptap'
 import 'element-tiptap/lib/index.css'
+import { uploadImage } from '@/api/image'
 
 export default {
   name: 'PublishIndex',
@@ -107,7 +108,19 @@ export default {
         new Paragraph(),
         new Heading({ level: 3 }),
         new Bold({ bubble: true }), // 在气泡菜单中渲染菜单按钮
-        new Image(),
+        // 默认把图片生成 base64字符串和内容存储在一起,如果需要自定义图片上传
+        new Image({
+          uploadRequest (file) {
+            // return 'http://toutiao-img.itheima.net/Fon8uLMXqnc2rRJUvTE914JZ4Sfo'
+            // console.log(file)
+            const fd = new FormData()
+            fd.append('image', file)
+            return uploadImage(fd).then(res => {
+            //   console.log(res)
+              return res.data.data.url
+            })
+          } // 图片的上传方法，返回一个 Promise<url>
+        }),
         new Underline(), // 下划线
         new Italic(), // 斜体
         new Strike(), // 删除线

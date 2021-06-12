@@ -116,8 +116,10 @@ export default {
             // 如果接口要求Content-Type设置为 multipart/form-data,请求体必须为FormData
             const fd = new FormData()
             fd.append('image', file)
+            // 这个return返回Promise对象,因为axios本身就是返回Promise对象
             return uploadImage(fd).then(res => {
             //   console.log(res)
+            // 这个return 返回最后的结果
               return res.data.data.url
             })
           } // 图片的上传方法，返回一个 Promise<url>

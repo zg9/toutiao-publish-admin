@@ -113,6 +113,7 @@ export default {
           uploadRequest (file) {
             // return 'http://toutiao-img.itheima.net/Fon8uLMXqnc2rRJUvTE914JZ4Sfo'
             // console.log(file)
+            // 如果接口要求Content-Type设置为 multipart/form-data,请求体必须为FormData
             const fd = new FormData()
             fd.append('image', file)
             return uploadImage(fd).then(res => {
